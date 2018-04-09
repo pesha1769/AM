@@ -1,0 +1,12 @@
+{% extends "core/core.html" %}
+
+{% block title %}Category {{ category.name }}{% endblock %}
+
+
+   {% block content %}
+       {% for category in categories %}
+            <a href="/categories/{{ category.id }}/">{{ category }}</a>
+            {% if not forloop.last %},{% endif %}
+       {% endfor %}
+   {% endblock %}
+
