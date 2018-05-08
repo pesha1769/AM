@@ -1,0 +1,81 @@
+{% extends "blog/base.html" %}
+{% block title %}Blog{% endblock %}
+
+{% block bar %}
+
+            <li class="nav-item ">
+              <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item active">
+              <a class="nav-link" href="/blog/">Blog</a>
+            </li>
+
+
+
+            {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                <a class="nav-link disabled" href="{% url "instruments" %}">Instruments</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link disabled" href="{% url "history" %}">History</a>
+                </li>
+
+                <li class="nav-item ">
+                <a class="nav-link" href="{% url 'blog:create'  %}">New post</a>
+                </li>
+
+                <li class="nav-item ">
+                <a class="nav-link" href="{% url 'logout' %}?next=/login">Sign-out</a>
+                </li>
+
+            {% else %}
+                <li class="nav-item ">
+                <a class="nav-link" href="/login/">Sign-in</a>
+                </li>
+            {% endif %}
+
+            {% endblock %}
+
+
+
+
+{% block content %}
+
+    {% if tag %}
+        <h2>Posts tagged with "{{ tag.name }}"</h2>
+    {% endif %}
+
+
+
+
+
+    {% for post in posts %}
+        <h2>
+            <a href="{% url "blog:post_detail" pk=post.id %}">{{ post.title }}</a>
+        </h2>
+
+
+        <p class="date">
+            by {{ post.author }}
+            <br> {{ post.publish }} <br>
+
+            {% for tag in post.tags.all %}
+                <a href="{% url "blog:post_list_by_tag" tag.slug %}">
+                    <i>{{ tag.name }}</i>
+                </a>
+
+            {% endfor %}
+
+
+        </p>
+
+
+
+        {{ post.body|truncatewords:30|linebreaks }}
+
+
+    {% endfor %}
+    {% include "pagination.html" with page=posts %}
+{% endblock %}

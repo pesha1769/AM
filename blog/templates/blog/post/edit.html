@@ -1,0 +1,16 @@
+{% extends "blog/base.html" %}
+{% block title %}Editing {{ post }}{% endblock %}
+{% block content %}
+    <form action="" method="post" >
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Edit">
+
+
+    </form> <br>
+        <form action="{% url "blog:delete" pk=post.pk %}">
+            <button type="submit">Delete</button>
+        </form>
+
+
+{% endblock %}
